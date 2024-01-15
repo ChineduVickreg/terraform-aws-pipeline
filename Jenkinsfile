@@ -38,6 +38,7 @@ pipeline {
                         sh 'terraform init'
                         // sh 'terraform apply -out=tfplan'
                         sh 'terraform apply tfplan'
+                        sh 'terraform destroy'
                     }
                 }
             }
