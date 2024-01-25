@@ -15,7 +15,7 @@ data "aws_availability_zones" "available" {}
 
 locals {
   name            = "darey-liveclass-cluster"
-  cluster_version = "1.24"
+  cluster_version = "1.29"
   region          = "eu-west-2"
 
   vpc_cidr = "10.0.0.0/16"
@@ -92,7 +92,7 @@ module "eks" {
     default_node_group = {
       # By default, the module creates a launch template to ensure tags are propagated to instances, etc.,
       # so we need to disable it to use the default template provided by the AWS EKS managed node group service
-      use_custom_launch_template = true
+      use_custom_launch_template = false
 
       disk_size = 50
 
@@ -107,7 +107,7 @@ module "eks" {
     bottlerocket_default = {
       # By default, the module creates a launch template to ensure tags are propagated to instances, etc.,
       # so we need to disable it to use the default template provided by the AWS EKS managed node group service
-      use_custom_launch_template = true
+      use_custom_launch_template = false
 
       ami_type = "BOTTLEROCKET_x86_64"
       platform = "bottlerocket"
