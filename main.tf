@@ -15,7 +15,7 @@ data "aws_availability_zones" "available" {}
 
 locals {
   name            = "darey-liveclass-cluster"
-  cluster_version = "1.26"
+  cluster_version = "1.25"
   region          = "eu-west-2"
 
   vpc_cidr = "10.0.0.0/16"
