@@ -67,5 +67,28 @@ pipeline {
                 }
             }
         }
+
+        stage('Cleanup') {
+            steps {
+                script {
+                    echo 'Starting Cleanup'
+                    // Add cleanup tasks here
+                    echo 'Cleanup completed'
+                }
+            }
+        }
+
+
+        stage('Destroy Infrastructure') {
+            steps {
+                script {
+                    echo 'Starting Infrastructure Destruction'
+                    // Run Terraform destroy command
+                    sh 'terraform destroy -auto-approve'
+                    echo 'Infrastructure Destruction completed'
+                }
+            }
+}
+
     }
 }
