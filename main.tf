@@ -454,7 +454,7 @@ data "aws_ami" "eks_default_bottlerocket" {
   }
 }
 
-resource "aws_eks_addon" "before_compute" {
+data "aws_eks_addon" "before_compute" {
   cluster_name = local.name
   addon_name   = "vpc-cni"
 
