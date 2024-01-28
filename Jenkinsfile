@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        TF_CLI_ARGS = '-no-color'
+        TF_CLI_ARGS = 'color'
     }
 
     stages {

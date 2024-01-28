@@ -69,7 +69,7 @@ module "eks" {
     }
   }
 
-
+  
   vpc_id                   = module.vpc.vpc_id
   subnet_ids               = module.vpc.private_subnets
   control_plane_subnet_ids = module.vpc.intra_subnets
@@ -451,14 +451,5 @@ data "aws_ami" "eks_default_bottlerocket" {
   filter {
     name   = "name"
     values = ["bottlerocket-aws-k8s-${local.cluster_version}-x86_64-*"]
-  }
-}
-
-data "aws_eks_addon" "before_compute" {
-  cluster_name = local.name
-  addon_name   = "vpc-cni"
-
-  before_compute {
-    resolve_conflicts_on_create = try(each.value.resolve_conflicts_on_create, "OVERWRITE")
   }
 }
