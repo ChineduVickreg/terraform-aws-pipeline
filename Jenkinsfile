@@ -17,7 +17,7 @@ pipeline {
         stage('Terraform Validate and Lint') {
         steps {
             script {
-                withCredentials([aws(credentialsId: 'AWS-CRED', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                 //sh 'terraform init'
                 echo 'Validating Terraform configuration'
                 sh 'terraform validate'
@@ -46,7 +46,7 @@ pipeline {
             steps {
                 script {
                     echo 'Starting Terraform Plan'
-                    withCredentials([aws(credentialsId: 'AWS_CRED', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                         // sh 'terraform init'
                         sh 'terraform plan -out=tfplan'
                     }
@@ -93,7 +93,7 @@ pipeline {
 
                     // Check if the user input is 'Yes'
                     if (userInput == 'Yes') {
-                        withCredentials([aws(credentialsId: 'AWS-CRED', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                             //sh 'terraform init'
                             sh 'terraform apply -input=false -auto-approve tfplan'
                             echo 'Terraform apply stage completed successfully. Resources built'
