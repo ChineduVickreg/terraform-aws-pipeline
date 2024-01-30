@@ -18,8 +18,8 @@ pipeline {
             steps {
                 script {
                     withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                        //sh 'terraform init'
-                        sh 'terraform plan -out=tfplan'
+                            sh 'terraform init'
+                            sh 'terraform plan -out=tfplan'
                     }
                 }
             }
@@ -35,7 +35,7 @@ pipeline {
         //             // Ask for manual confirmation before applying changes
                     input message: 'Do you want to apply changes?'
                     withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                        sh 'terraform apply tfplan'
+                            sh 'terraform apply tfplan'
                     }
                 }
             }
