@@ -63,8 +63,10 @@ pipeline {
             steps {
                 script {
                     withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        dir('./terraform'){
                         sh 'terraform init'
                         sh 'terraform plan -out=tfplan'
+                        }
                     }
                 }
             }
