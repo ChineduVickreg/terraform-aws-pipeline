@@ -18,7 +18,7 @@ pipeline {
         stage('Terraform Validate and Lint') {
             steps {
                 script {
-                    withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    withCredentials([aws(credentialsId: 'AWS_CRED', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     //sh 'terraform init'
                     echo 'Validating Terraform configuration'
                     sh 'terraform validate'
@@ -47,7 +47,7 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 script {
-                    withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    withCredentials([aws(credentialsId: 'AWS_CRED', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     //sh 'terraform init'
                         sh 'terraform plan -out=tfplan'
                         echo 'Terraform Plan stage completed sucessfully'
@@ -59,7 +59,7 @@ pipeline {
                 /* Apply Terraform plan (only for main branch and manual triggers) */
         stage('Terraform Apply') {
             when {
-                expression { env.BRANCH_NAME == 'main' }
+                expression { env.BRANCH_NAME == 'terra-project' }
                 expression { currentBuild.rawBuild.getCause(hudson.model.Cause$UserIdCause) != null }
             }
             steps {
@@ -74,7 +74,7 @@ pipeline {
 
                     // Check if the user input is 'Yes'
                     if (userInput == 'Yes') {
-                        withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        withCredentials([aws(credentialsId: 'AWS_CRED', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                             //sh 'terraform init'
                             sh 'terraform apply -input=false -auto-approve tfplan'
                             echo 'Terraform apply stage completed successfully. Resources built'
@@ -90,7 +90,7 @@ pipeline {
         post {
             always {
                 script {
-                    withCredentials([aws(credentialsId: 'AWS-Authentication', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    withCredentials([aws(credentialsId: 'AWS_CRED', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                         echo 'Waiting for 3 minutes before cleanup...'
                         sleep(time: 3, unit: 'MINUTES')  // Delay for 3 minutes
 
