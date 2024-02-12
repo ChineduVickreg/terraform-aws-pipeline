@@ -156,7 +156,7 @@ module "eks" {
         [settings.kubernetes.node-taints]
         dedicated = "experimental:PreferNoSchedule"
         special = "true:NoSchedule"
-        EOT
+      EOT
     }
 
     # Use a custom AMI
