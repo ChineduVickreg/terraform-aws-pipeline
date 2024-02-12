@@ -87,7 +87,7 @@ pipeline {
         }
 
             /* Cleanup stage */
-        post {
+        stage('Terraform Destroy') {
             always {
                 script {
                     withCredentials([aws(credentialsId: 'AWS_CRED', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
