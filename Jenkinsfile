@@ -31,7 +31,7 @@ pipeline {
             }
         }
 
-        /* Validate and lint Terraform configuration */
+        /* Validate and lint Terraform config */
         stage('Terraform Validate and Lint') {
             steps {
                 script {
