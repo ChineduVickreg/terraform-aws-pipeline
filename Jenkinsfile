@@ -29,10 +29,10 @@ pipeline {
                         try {
                             sh 'terraform fmt -check'  // Check formatting
                             sh 'tflint'  // Run TFLint
-                        } catch (LintingException e) {
-                            echo "Terraform linting failed: ${e}"
+                        } catch (Exception e) {
+                            echo "An error occurred during linting: ${e}"
                             currentBuild.result = 'UNSTABLE'  // Mark build as unstable
-                        }   
+}
                     }
                 }
             }
@@ -298,4 +298,6 @@ pipeline {
 //                 }
 //             }
 //         }
-// }
+//     }
+// }    
+        
