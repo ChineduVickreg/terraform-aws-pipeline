@@ -31,34 +31,108 @@ pipeline {
             }
         }
 
-        /* Validate and lint Terraform config */
+    //     stage('Lint Terraform Files') {
+    //         steps {
+    //             // Assuming your Terraform files are located in a directory called 'terraform'
+    //             dir('terraform') {
+    //                 // Run TFLint against Terraform files with formatting
+    //                 sh "tflint --format"
+    //             }
+    //         }
+    //     }
+    // }
+
+        // /* Validate and lint Terraform config */
+        // stage('Terraform Validate and Lint') {
+        //     steps {
+        //         script {
+        //             withCredentials([aws(credentialsId: 'AWS_CRED', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+        //             sh 'terraform init'
+        //             echo 'Validating Terraform configuration'
+        //             sh 'terraform validate'
+        //             echo 'Validation completed sucessfully'
+
+        //             echo 'Linting Terraform files'
+        //              // Define the TFLint version
+        //             def tflintVersion = "v0.29.0"
+
+        //             // Define the download URL for TFLint
+        //             def tflintUrl = "https://github.com/terraform-linters/tflint/releases/download/${tflintVersion}/tflint_linux_amd64.zip"
+
+        //             // Define the directory to install TFLint
+        //             def tflintDir = "${env.WORKSPACE}/tflint"
+
+        //             // Create the directory if it doesn't exist
+        //             sh "mkdir -p ${tflintDir}"
+
+        //             // Download and extract TFLint
+        //             sh "wget ${tflintUrl} -O ${tflintDir}/tflint.zip"
+        //             sh "unzip ${tflintDir}/tflint.zip -d ${tflintDir}"
+
+        //             // Add TFLint to the PATH
+        //             env.PATH = "${tflintDir}:${env.PATH}"
+
+        //             // Verify TFLint installation
+        //             sh "tflint --version"
+        //             sh "tflint --format"
+        //             try {
+        //                 def fmtOutput = sh(script: 'terraform fmt -check', returnStdout: true).trim()
+        //                 if(fmtOutput.isEmpty()){
+        //                     echo 'Lint check completed sucessfully'
+        //                 }else{
+        //                     echo "Terraform formatting issues found:\n${fmtOutput}"
+        //                     currentBuild.result = 'FAILURE'
+        //                 } 
+                        
+        //             } catch (err) {
+        //                 currentBuild.result = 'FAILURE'
+        //                 error("Terraform linting failed: ${err}")
+        //             }
+        //             }
+        //         }
+        //     }
+        // }
+
+
         stage('Terraform Validate and Lint') {
             steps {
                 script {
                     withCredentials([aws(credentialsId: 'AWS_CRED', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh 'terraform init'
-                    echo 'Validating Terraform configuration'
-                    sh 'terraform validate'
-                    echo 'Validation completed sucessfully'
+                        echo 'Validating Terraform configuration'
+                        sh 'terraform init'
+                        sh 'terraform validate'
+                        echo 'Validation completed successfully'
 
-                    echo 'Linting Terraform files'
-                    try {
-                        def fmtOutput = sh(script: 'terraform fmt -check', returnStdout: true).trim()
-                        if(fmtOutput.isEmpty()){
-                            echo 'Lint check completed sucessfully'
-                        }else{
-                            echo "Terraform formatting issues found:\n${fmtOutput}"
-                            currentBuild.result = 'FAILURE'
-                        } 
-                        
-                    } catch (err) {
-                        currentBuild.result = 'FAILURE'
-                        error("Terraform linting failed: ${err}")
-                    }
+                       echo 'Linting Terraform files'
+                       try {
+                            sh 'terraform fmt -check'  // Check formatting
+                            sh 'tflint'  // Run TFLint
+                        } catch (LintingException e) {
+                            echo "Terraform linting failed: ${e}"
+                            currentBuild.result = 'UNSTABLE'  // Mark build as unstable
+                        }   
+
+                        // echo 'Linting Terraform files'
+                        // try {
+                        //     sh "tflint --format"
+                        //     def fmtOutput = sh(script: 'terraform fmt -check', returnStdout: true).trim()
+                        //     if (fmtOutput.isEmpty()) {
+                        //         echo 'Lint check completed successfully'
+                        //     } else {
+                        //         echo "Terraform formatting issues found:\n${fmtOutput}"
+                        //         currentBuild.result = 'FAILURE'
+                        //     }
+                        // } catch (err) {
+                        //     currentBuild.result = 'FAILURE'
+                        //     error("Terraform linting failed: ${err}")
+                        // }
                     }
                 }
             }
         }
+
+        // Other stages...
+    }
 
         /* Generate Terraform plan */
         stage('Terraform Plan') {
