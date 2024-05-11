@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.6"
+    }
+  }
+}
 provider "kubernetes" {
   host                   = module.eks.cluster_endpoint
   cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
@@ -23,6 +31,7 @@ locals {
 
   tags = {
     Name = local.name
+    Region = local.region
   }
 }
 
@@ -32,7 +41,7 @@ locals {
 
 module "eks" {
   source                         = "terraform-aws-modules/eks/aws"
-  version                        = "~> 20.10.0"
+  version                        = "~> 19.0.0"
   cluster_name                   = local.name
   cluster_version                = local.cluster_version
   cluster_endpoint_public_access = true
@@ -446,7 +455,7 @@ data "aws_ami" "eks_default_arm" {
 data "aws_ami" "eks_default_bottlerocket" {
   most_recent = true
   owners      = ["amazon"]
-
+  
   filter {
     name   = "name"
     values = ["bottlerocket-aws-k8s-${local.cluster_version}-x86_64-*"]
