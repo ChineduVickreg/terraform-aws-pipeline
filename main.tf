@@ -63,18 +63,33 @@ module "eks" {
   cluster_addons = {
     coredns = {
       most_recent                  = true
-      resolve_conflicts_on_create  = try(each.value.resolve_conflicts, "OVERWRITE")
-      resolve_conflicts_on_update  = try(each.value.resolve_conflicts, "OVERWRITE")
+      count = var.create_addon ? 1 : 0  # Only create the addon if specified
+
+      resolve_conflicts = var.create_addon ? "OVERWRITE" : null  # Set resolve_conflicts only if creating addon
+      resolve_conflicts_on_create = var.create_addon ? null : "OVERWRITE"  # Set resolve_conflicts_on_create if updating addon
+      resolve_conflicts_on_update = var.create_addon ? "OVERWRITE" : null  # Set resolve_conflicts_on_update if creating addon
+      # resolve_conflicts_on_create  = try(each.value.resolve_conflicts, "OVERWRITE")
+      # resolve_conflicts_on_update  = try(each.value.resolve_conflicts, "OVERWRITE")
     }
     kube-proxy = {
       most_recent                  = true
-      resolve_conflicts_on_create  = try(each.value.resolve_conflicts, "OVERWRITE")
-      resolve_conflicts_on_update  = try(each.value.resolve_conflicts, "OVERWRITE")
+      count = var.create_addon ? 1 : 0  # Only create the addon if specified
+
+      resolve_conflicts = var.create_addon ? "OVERWRITE" : null  # Set resolve_conflicts only if creating addon
+      resolve_conflicts_on_create = var.create_addon ? null : "OVERWRITE"  # Set resolve_conflicts_on_create if updating addon
+      resolve_conflicts_on_update = var.create_addon ? "OVERWRITE" : null  # Set resolve_conflicts_on_update if creating addon
+      # resolve_conflicts_on_create  = try(each.value.resolve_conflicts, "OVERWRITE")
+      # resolve_conflicts_on_update  = try(each.value.resolve_conflicts, "OVERWRITE")
     }
     vpc-cni = {
       most_recent                  = true
-      resolve_conflicts_on_create  = try(each.value.resolve_conflicts, "OVERWRITE")
-      resolve_conflicts_on_update  = try(each.value.resolve_conflicts, "OVERWRITE")
+      count = var.create_addon ? 1 : 0  # Only create the addon if specified
+
+      resolve_conflicts = var.create_addon ? "OVERWRITE" : null  # Set resolve_conflicts only if creating addon
+      resolve_conflicts_on_create = var.create_addon ? null : "OVERWRITE"  # Set resolve_conflicts_on_create if updating addon
+      resolve_conflicts_on_update = var.create_addon ? "OVERWRITE" : null  # Set resolve_conflicts_on_update if creating addon
+      # resolve_conflicts_on_create  = try(each.value.resolve_conflicts, "OVERWRITE")
+      # resolve_conflicts_on_update  = try(each.value.resolve_conflicts, "OVERWRITE")
       before_compute           = true
       service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
       configuration_values = jsonencode({

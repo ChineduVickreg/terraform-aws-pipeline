@@ -7,3 +7,9 @@ variable "iam_role_attach_cni_policy" {
   type        = list(string)
   default     = null
 }
+variable "create_addon" {
+  description = "Flag to indicate whether to create the addon"
+  type        = bool
+  default     = true  # Set the default value according to your requirements
+}
+
