@@ -62,19 +62,19 @@ module "eks" {
 
   cluster_addons = {
     coredns = {
-      most_recent = true
+      most_recent                  = true
       resolve_conflicts_on_create  = "OVERWRITE"
-      resolve_conflicts_on_update  = "OVERWRITE"
+      # resolve_conflicts_on_update  = "OVERWRITE"
     }
     kube-proxy = {
-      most_recent = true
+      most_recent                  = true
       resolve_conflicts_on_create  = "OVERWRITE"
-      resolve_conflicts_on_update  = "OVERWRITE"
+      # resolve_conflicts_on_update  = "OVERWRITE"
     }
     vpc-cni = {
-      most_recent              = true
+      most_recent                  = true
       resolve_conflicts_on_create  = "OVERWRITE"
-      resolve_conflicts_on_update  = "OVERWRITE"
+      # resolve_conflicts_on_update  = "OVERWRITE"
       before_compute           = true
       service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
       configuration_values = jsonencode({
