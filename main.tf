@@ -27,7 +27,8 @@ locals {
 
   tags = {
     Name = local.name
-    Region = local.region
+    region = local.region
+    
   }
 }
 
@@ -56,12 +57,18 @@ module "eks" {
   cluster_addons = {
     coredns = {
       most_recent = true
+      resolve_conflicts_on_create  = "OVERWRITE"
+      resolve_conflicts_on_update  = "OVERWRITE"
     }
     kube-proxy = {
       most_recent = true
+      resolve_conflicts_on_create  = "OVERWRITE"
+      resolve_conflicts_on_update  = "OVERWRITE"
     }
     vpc-cni = {
       most_recent              = true
+      resolve_conflicts_on_create  = "OVERWRITE"
+      resolve_conflicts_on_update  = "OVERWRITE"
       before_compute           = true
       service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
       configuration_values = jsonencode({
@@ -360,14 +367,13 @@ module "ebs_kms_key" {
   key_administrators = [
     data.aws_caller_identity.current.arn
   ]
-
-  key_service_roles_for_autoscaling = [
-    # required for the ASG to manage encrypted volumes for nodes
-    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
-    # required for the cluster / persistentvolume-controller to create encrypted PVCs
-    module.eks.cluster_iam_role_arn,
-  ]
-
+   key_service_roles_for_autoscaling = [
+      # required for the ASG to manage encrypted volumes for nodes
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+      # required for the cluster / persistentvolume-controller to create encrypted PVCs
+      module.eks.cluster_iam_role_arn,
+      # Add other roles as needed
+   ]
   # Aliases
   aliases = ["eks/${local.name}/ebs"]
 
