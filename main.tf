@@ -390,7 +390,7 @@ module "ebs_kms_key" {
       # required for the cluster / persistentvolume-controller to create encrypted PVCs
       module.eks.cluster_iam_role_arn
       # Add other roles as needed
-   ]    
+   ]                  
 
   # Policy
   key_administrators = [
