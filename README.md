@@ -114,5 +114,5 @@ I also added the ‘Lint code’ stage before the terraform plan so as to valida
 I added a ‘Cleanup’ stage.
 And lastly an error handling stage 
 Errors Encountered and Error Handling.
-
+![Screenshot of errors from Jenkins pipeline](/Users/mac/Desktop/error1.png)
 
