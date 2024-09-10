@@ -15,8 +15,8 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "terraform-s3bucket-for-practice"
+    bucket = "tstorage-bucket-23354"
     key    = "terraform.tfstate"
-    region = "eu-west-2"
+    region = "us-east-1"
   }
 }
